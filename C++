@@ -1,0 +1,144 @@
+#include <iostream>
+#include <vector>
+#include <iomanip>
+using namespace std;
+
+// Structure to store order details
+struct Order {
+    int id;
+    string customer;
+    int quantity;
+    float price;
+};
+
+// Global vector of orders with initial data
+vector<Order> orders = {
+    {101, "Thabo", 3, 15.75},
+    {102, "Lerato", 5, 30.50},
+    {103, "Nomvula", 2, 10.00},
+    {104, "Sipho", 4, 22.00},
+    {105, "Bongani", 6, 40.25},
+    {106, "Lindiwe", 1, 5.50},
+    {107, "Jabulani", 3, 18.00},
+    {108, "Ayanda", 2, 12.17},
+    {109, "Kgosi", 6, 28.00},
+    {110, "Refilwe", 4, 24.50}
+};
+
+// Function to add a new order
+void addOrder() {
+    if (orders.size() >= 50) {
+        cout << "Cannot add more orders. Maximum of 50 reached.\n";
+        return;
+    }
+
+    Order newOrder;
+
+    cout << "Enter Order ID: ";
+    cin >> newOrder.id;
+
+    cin.ignore(); // Clear input buffer
+    cout << "Enter Customer Name: ";
+    getline(cin, newOrder.customer);
+
+    cout << "Enter Quantity: ";
+    cin >> newOrder.quantity;
+
+    cout << "Enter Price per Unit: ";
+    cin >> newOrder.price;
+
+    orders.push_back(newOrder);
+    cout << "Order added successfully.\n";
+}
+
+// Function to display all orders
+void displayOrders() {
+    if (orders.empty()) {
+        cout << "No orders to display.\n";
+        return;
+    }
+
+    cout << "\n Magwinya Order Summary:\n";
+    cout << left << setw(10) << "ID"
+         << setw(15) << "Customer"
+         << setw(10) << "Qty"
+         << setw(10) << "Price"
+         << setw(12) << "Total" << endl;
+    cout << string(57, '-') << endl;
+
+    for (const auto& order : orders) {
+        float total = order.quantity * order.price;
+        cout << left << setw(10) << order.id
+             << setw(15) << order.customer
+             << setw(10) << order.quantity
+             << setw(10) << fixed << setprecision(2) << order.price
+             << setw(12) << fixed << setprecision(2) << total << endl;
+    }
+}
+
+// Function to find an order by its ID
+void findOrderById() {
+    int id;
+    cout << "Enter Order ID to search: ";
+    cin >> id;
+
+    bool found = false;
+    for (const auto& order : orders) {
+        if (order.id == id) {
+            float total = order.quantity * order.price;
+            cout << "\n Order Found:\n";
+            cout << "Customer: " << order.customer << "\n";
+            cout << "Quantity: " << order.quantity << "\n";
+            cout << "Price per unit: R" << fixed << setprecision(2) << order.price << "\n";
+            cout << "Total: R" << fixed << setprecision(2) << total << "\n";
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Order not found.\n";
+    }
+}
+
+// Function to calculate total revenue
+void calculateRevenue() {
+    if (orders.empty()) {
+        cout << "No revenue to calculate. No orders yet.\n";
+        return;
+    }
+
+    float total = 0;
+    for (const auto& order : orders) {
+        total += order.quantity * order.price;
+    }
+    cout << "Total Revenue: R" << fixed << setprecision(2) << total << "\n";
+}
+
+// Main function with menu
+int main() {
+    int choice;
+
+    do {
+        cout << "\n=== Magwinya Order Management Menu ===\n";
+        cout << "1. Add New Order\n";
+        cout << "2. Display All Orders\n";
+        cout << "3. Find Order by ID\n";
+        cout << "4. Calculate Total Revenue\n";
+        cout << "5. Exit Program\n";
+        cout << "Enter your choice (1-5): ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: addOrder(); break;
+            case 2: displayOrders(); break;
+            case 3: findOrderById(); break;
+            case 4: calculateRevenue(); break;
+            case 5: cout << "Exiting program. Goodbye!\n"; break;
+            default: cout << "Invalid choice. Please try again.\n";
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
